@@ -36,9 +36,8 @@ func Test_genLeetcode_weekly(t *testing.T) {
 
 	// 临时账号的 Cookie LEETCODE_SESSION
 	var leetcodeSession = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfYXV0aF91c2VyX2lkIjoiNjYwMjUxMyIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNGYyZGE4MDljYWUyNWZlMTM4NjM3ZmMyMGJkMTRiYzZjMjc2OTA5MDEzZjRmOGM1MjNkZjMwYzdjY2MxZjViYyIsImlkIjo2NjAyNTEzLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiendlaV9lbGVuXzIwMjMtMTAtMDMiLCJ1c2VyX3NsdWciOiJ6d2VpX2VsZW5fMjAyMy0xMC0wMyIsImF2YXRhciI6Imh0dHBzOi8vYXNzZXRzLmxlZXRjb2RlLmNuL2FsaXl1bi1sYy11cGxvYWQvdXNlcnMvendlaV9lbGVuXzIwMjMtMTAtMDMvYXZhdGFyXzE2OTYzNDM5MTQucG5nIiwicGhvbmVfdmVyaWZpZWQiOnRydWUsIl90aW1lc3RhbXAiOjE2OTY1MTM3MjcuNDQxMywiZXhwaXJlZF90aW1lXyI6MTY5OTAzODAwMCwidmVyc2lvbl9rZXlfIjoxfQ._A9OHtBKIAqARuXHz5AVuu3hDxbcD0qXes_Sxv08Qk0"
-	var token = "bJCTi392zDpMDjiaKBIYATs9xRlzeMqj871LDBvRcEJlqHu6kmxeKrBL4smVIA8W"
 
-	err := GenLeetCodeTestsBySession(NewSession(token, leetcodeSession), tag, true, dir, comment)
+	err := GenLeetCodeTestsBySession(NewSession(leetcodeSession), tag, true, dir, comment)
 	if err != nil {
 		t.Error(err)
 	}
@@ -57,20 +56,16 @@ func Test_genLeetcode_biweekly(t *testing.T) {
 	}
 }
 
-func NewSession(csrftoken, leetcodeSession string) *grequests.Session {
+func NewSession(leetcodeSession string) *grequests.Session {
 	session := grequests.NewSession(&grequests.RequestOptions{
 		UserAgent:    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36",
 		UseCookieJar: true,
 	})
-	u, _ := url.Parse("https://leetcode.cn/accounts/login/")
+	u, _ := url.Parse("https://leetcode.cn/")
 	session.HTTPClient.Jar.SetCookies(u, []*http.Cookie{
 		{
 			Name:  "LEETCODE_SESSION",
 			Value: leetcodeSession,
-		},
-		{
-			Name:  "csrftoken",
-			Value: csrftoken,
 		},
 	})
 	return session
